@@ -1,0 +1,6 @@
+
+
+sudo install_name_tool -change libmysqlclient.18.dylib /usr/local/mysql-5.5.15-osx10.6-x86_64/lib/libmysqlclient.18.dylib /Users/billy/.rvm/gems/ruby-1.9.2-p290@test_app/gems/mysql2-0.2.13/lib/mysql2/mysql2.bundle
+
+WARNING: This version of mysql2 (0.3.7) doesn't ship with the ActiveRecord adapter bundled anymore as it's now part of Rails 3.1
+WARNING: Please use the 0.2.x releases if you plan on using it in Rails <= 3.0.x
