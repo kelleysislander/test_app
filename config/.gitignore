@@ -1,0 +1,17 @@
+config/deploy/database.yml
+config/deploy/database_sav.yml
+.DS_Store
+Gemfile.lock
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/
+.ackrc
+*.tmproj
+public/cache/
+public/stylesheets/compiled/
+public/system/*
+tmp/restart.txt
+public/.DS_Store
+.rvmrc
+public/stylesheets/.DS_Store

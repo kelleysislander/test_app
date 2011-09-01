@@ -1,9 +1,25 @@
+=begin
+In case you need to run deploy:setup again and you don’t want Capistrano to ask for a database password, 
+set the skip_db_setup option to true. This is especially useful in combination with capistrano multi-stage 
+recipe when you already setup your server and you share the same environment across all the stages.
+
+$ cap deploy:setup -s "skip_db_setup=true"
+
+=end
+
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'deploy')
+
 set :stages, %w(staging production)
 set :default_stage, "staging"
 
 require 'bundler/capistrano'
-
 require 'capistrano/ext/multistage'
+puts "deploy.rb: require capistrano_database"
+require "capistrano_database"
+
+$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
+require "rvm/capistrano"
+require 'bundler/capistrano'
 
 puts "ENV['rvm_path']"
 puts ENV['rvm_path']
@@ -16,15 +32,19 @@ puts "END ENV['rvm_path']"
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))  # Add RVM's lib directory to the load path.
 require "rvm/capistrano"                                # Load RVM's capistrano plugin.
 set :rvm_ruby_string, '1.9.2-p290@test_app'               # Or whatever env you want it to run in.
+set :rvm_bin_path, "$HOME/.rvm/bin"
+set :rvm_type, :user
+
+set :default_environment, {
+  'PATH' => "/home/deploy/.rvm/gems/ruby-1.9.2-p290/bin:/home/deploy/.rvm/gems/ruby-1.9.2-p290@global/bin:/home/deploy/.rvm/rubies/ruby-1.9.2-p290/bin:/home/deploy/.rvm/bin:$PATH",
+  'RUBY_VERSION' => 'ruby-1.9.2-p290',
+  'GEM_HOME'     => '/home/deploy/.rvm/gems/ruby-1.9.2-p290',
+  'GEM_PATH'     => '/home/deploy/.rvm/gems/ruby-1.9.2-p290:/home/deploy/.rvm/gems/ruby-1.9.2-p290@global',
+  'BUNDLE_PATH'  => '/home/deploy/.rvm/gems/ruby-1.9.2-p290'  # If you are using bundler.
+}
 
 namespace :deploy do
 
-  desc "Restarts the Delayed Jobs server"
-  task :prepare_delayed_jobs do
-    run "cd #{current_path} && RAILS_ENV=#{rails_env} script/delayed_job stop"
-    run "cd #{current_path} && RAILS_ENV=#{rails_env} script/delayed_job -n 3 start"
-  end
-  
   # NOTE:  the variables RAILS_SHARED_PATH, RAILS_CURRENT_PATH are used to pass their values into wheneverize's schedule.rb
   desc "Update crontab from whenever configuration"
   task :wheneverize, :roles => :db do
@@ -79,8 +99,8 @@ namespace :deploy do
 
     put vhost, "#{release_path}/config/vhost"
     # sudo "rm /opt/nginx/sites-available/#{app_uri} /opt/nginx/sites-enabled/#{app_uri}"
-    sudo "mv -f #{release_path}/config/vhost /opt/nginx/sites-available/#{app_uri}"
-    sudo "ln -f -s /opt/nginx/sites-available/#{app_uri} /opt/nginx/sites-enabled/#{app_uri}"
+    sudo "mv -f #{release_path}/config/vhost /etc/nginx/sites-available/#{app_uri}"
+    sudo "ln -f -s /etc/nginx/sites-available/#{app_uri} /opt/nginx/sites-enabled/#{app_uri}"
     sudo "/etc/init.d/nginx reload"
   end
 
@@ -88,21 +108,9 @@ namespace :deploy do
   desc "Restarting mod_rails with restart.txt"
   task :restart, :roles => :app, :except => { :no_release => true } do
     puts "running => task :restart, :roles => :app, :except => { :no_release => true }"
-
     run "touch #{current_path}/tmp/restart.txt"
   end
 
-  desc "Link the config files (.rvmrc & database.yml) into the current release path."
-  task :symlink_configs, roles: :app, except: {:no_release => true} do
-
-    puts "running => task :symlink_configs"
-    run <<-CMD
-      cd #{latest_release} && 
-      ln -nfs #{shared_path}/config/database.yml #{latest_release}/config/database.yml &&
-      ln -nfs #{shared_path}/config/.rvmrc #{latest_release}/config/.rvmrc
-    CMD
-  end
-  
   namespace :nginx do
     desc "Reload Nginx"
     task :reload do
@@ -110,21 +118,39 @@ namespace :deploy do
     end
   end
 
+  namespace :db do
+    desc 'Migrate DB down, up, seed'
+    task :reseed do
+      run "cd #{current_path} && RAILS_ENV=#{rails_env} rake db:migrate VERSION=0 && RAILS_ENV=#{rails_env} rake db:migrate && RAILS_ENV=#{rails_env} rake db:seed"
+    end
+  end
+
+
 end
 
+after "deploy:cleanup",             "deploy:create_vhost_nginx"
+after "deploy:create_vhost_nginx",  "deploy:nginx:reload"
 
-# after "deploy:update_code", "deploy:symlink_configs"
-after "deploy", "deploy:symlink_uploads"
-# NOTE: we need to conditionalize this because every time there is a deploy to staging it overwrites crontab for production because staging and prod
-# are both on the same host using the same deploy user and of course there is only one crontab per user so the crontab is "shared"
-after "deploy", "deploy:wheneverize"
-after "deploy:symlink_configs", "deploy:cleanup"
-after "deploy:cleanup", "deploy:nginx:reload"
+=begin
+NOTE:  To run the 'capistrano_database.rb' you do a:
+  
+  cap deploy:setup
+  
+To run setup again and avoid inputting the db pwd do a:
+  
+  cap deploy:setup -s "skip_db_setup=true"
+  
+
+=end
+# don't run these next 2 tasks the very first time a deploy is done since the target of the symlink must be moved into place after the first deploy
+# after "deploy:migrations", "deploy:cleanup"
+# after "deploy:symlink_configs", "deploy:cleanup"
 # after "nginx:reload", "thin:restart"
-after "deploy:migrations", "deploy:cleanup"
 
 # after "deploy:wheneverize","deploy:prepare_delayed_jobs"
 # after "deploy:symlink_uploads", "deploy:symlink_configs"
+# after "deploy", "deploy:symlink_uploads"
+# after "deploy", "deploy:wheneverize"
 
 =begin
 On the remote server:
