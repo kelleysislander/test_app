@@ -125,9 +125,28 @@ namespace :deploy do
     end
   end
 
+  # namespace :rvmrc do
+  #   task :symlink do
+  #     puts "************* Running deploy:rvmrc:symlink #{rvm_ruby_string}, #{release_path}, #{shared_path}"
+  #     run "ls -al #{release_path}"
+  #     # put "rvm --create use #{rvm_ruby_string}", "#{release_path}/.rvmrc"
+  #   end
+  # end
 
+  desc 'moves the current .rvmrc into #{shared_path/config/.rvmrc and symlinks it'
+  namespace :rvmrc do
+    task :symlink, :except => { :no_release => true } do
+      puts "************ running: deploy.rb: symlinking .rvmrc: ln -nfs #{shared_path}/config/.rvmrc #{release_path}/config/.rvmrc"
+      run "cp -vf #{release_path}/.rvmrc #{shared_path}/config/.rvmrc"
+      puts "************ running: ln -nfs #{shared_path}/config/.rvmrc #{release_path}/.rvmrc"
+      run "ln -nfs .rvmrc #{shared_path}/config/.rvmrc"
+      # run "ln -nfs #{shared_path}/config/.rvmrc #{release_path}/.rvmrc"
+    end
+  end
 end
 
+  # # after "deploy", "rvmrc:create"
+# before "deploy:finalize_update",     "deploy:rvmrc:symlink"
 after "deploy:cleanup",             "deploy:create_vhost_nginx"
 after "deploy:create_vhost_nginx",  "deploy:nginx:reload"
 

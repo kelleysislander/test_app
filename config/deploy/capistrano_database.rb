@@ -87,7 +87,7 @@ Capistrano::Configuration.instance.load do
   puts "capistano_database.rb: NEXT: db:setup"
   after "deploy:setup",           "db:setup"   unless fetch(:skip_db_setup, false)
   # This runs during a basic deploy, not "cap deploy:setup"
-  puts "capistano_database.rb: NEXT: deploy:finalize_update", "db:symlink"
+  puts "capistano_database.rb: NEXT: after deploy:finalize_update, db:symlink"
   after "deploy:finalize_update", "db:symlink"
 
 end
