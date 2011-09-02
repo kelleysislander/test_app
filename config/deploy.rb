@@ -147,8 +147,9 @@ end
 
 # after "deploy", "rvmrc:create"
 # before "deploy:finalize_update",     "deploy:rvmrc:symlink"
-after "deploy:update_code",         "deploy:create_vhost_nginx"
-after "deploy:create_vhost_nginx",  "deploy:nginx:reload"
+
+# after "deploy:update_code",         "deploy:create_vhost_nginx"
+# after "deploy:create_vhost_nginx",  "deploy:nginx:reload"
 
 =begin
 NOTE:  To run the 'capistrano_database.rb' you do a:
