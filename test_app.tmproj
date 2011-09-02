@@ -75,6 +75,8 @@
 			<string>log</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>public</string>
 			<key>regexFolderFilter</key>
@@ -114,6 +116,18 @@
 			<key>sourceDirectory</key>
 			<string>vendor</string>
 		</dict>
+		<dict>
+			<key>filename</key>
+			<string>.rvmrc</string>
+			<key>lastUsed</key>
+			<date>2011-09-01T20:12:18Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>config/.gitignore</string>
+			<key>lastUsed</key>
+			<date>2011-09-01T19:57:35Z</date>
+		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>330</integer>
@@ -138,51 +152,37 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>61</integer>
 				<key>line</key>
-				<integer>28</integer>
+				<integer>102</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>99</integer>
 		</dict>
 		<key>config/deploy/capistrano_database.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>73</integer>
+				<integer>34</integer>
 				<key>line</key>
-				<integer>14</integer>
+				<integer>12</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>config/deploy/database.yml.erb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>12</integer>
 		</dict>
 		<key>config/deploy/production.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>47</integer>
 				<key>line</key>
-				<integer>9</integer>
+				<integer>6</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -194,30 +194,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>10</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>15</integer>
+				<integer>3</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>5</integer>
-				<key>line</key>
-				<integer>15</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>10</integer>
-				<key>line</key>
-				<integer>15</integer>
-			</dict>
 		</dict>
 		<key>config/routes.rb</key>
 		<dict>
@@ -267,17 +251,14 @@
 	<key>openDocuments</key>
 	<array>
 		<string>app/controllers/application_controller.rb</string>
-		<string>doc/how_to_get_mysql_adapter_running.txt</string>
-		<string>config/routes.rb</string>
 		<string>config/deploy/capistrano_database.rb</string>
 		<string>config/deploy.rb</string>
-		<string>config/deploy/database.yml.erb</string>
 		<string>config/deploy/staging.rb</string>
 		<string>config/deploy/production.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{-1911, 18}, {1337, 1024}}</string>
+	<string>{{-1908, 16}, {1337, 1024}}</string>
 </dict>
 </plist>

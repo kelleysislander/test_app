@@ -5,8 +5,8 @@
 set :application, 'test_app'
 set :app_uri, 'test_app.billyk.com'
 set :deploy_to, "/var/www/vhosts/#{app_uri}"
-set :gem_home, '/home/deploy/.rvm/gems/ruby-1.9.2-p290@test_app'
-set :gem_path, '/home/deploy/.rvm/gems/ruby-1.9.2-p290@test_app:/home/deploy/.rvm/gems/ruby-1.9.2-p290:/home/deploy/.rvm/gems/ruby-1.9.2-p290@global'
+set :gem_home, '/home/deploy/.rvm/gems/ruby-1.9.2-p180@test_app'
+set :gem_path, '/home/deploy/.rvm/gems/ruby-1.9.2-p180@test_app:/home/deploy/.rvm/gems/ruby-1.9.2-p180:/home/deploy/.rvm/gems/ruby-1.9.2-p180@global'
 
 #############################################################
 #	Settings

@@ -7,6 +7,7 @@ gem "haml", "~> 3.0.25"
 gem "haml-rails", "~> 0.3.4"
 gem 'capistrano', '2.5.19'
 gem 'capistrano-ext', '1.2.1'
+gem 'passenger'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

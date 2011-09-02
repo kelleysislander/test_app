@@ -4,9 +4,9 @@
 
 set :application, 'Cascade'
 set :app_uri, 'cascade.semaphoremobile.com'
-set :deploy_to, "/var/www/vhosts/#{app_uri}"
-set :gem_home, '/usr/local/rvm/gems/ruby-1.9.2-p290@test_app'
-set :gem_path, '/usr/local/rvm/gems/ruby-1.9.2-p290@test_app:/usr/local/rvm/gems/ruby-1.9.2-p290:/usr/local/rvm/gems/ruby-1.9.2-p290@global'
+set :deploy_to, "/var/www/vhost180s/#{app_uri}"
+set :gem_home, '/usr/local/rvm/gems/ruby-1.9.2-p180@test_app'
+set :gem_path, '/usr/local/rvm/gems/ruby-1.9.2-p180@test_app:/usr/local/rvm/gems/ruby-1.9.2-p180:/usr/local/rvm/gems/ruby-1.9.2-p180@global'
 
 #############################################################
 #	Settings

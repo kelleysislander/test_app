@@ -31,17 +31,17 @@ puts "END ENV['rvm_path']"
 
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))  # Add RVM's lib directory to the load path.
 require "rvm/capistrano"                                # Load RVM's capistrano plugin.
-set :rvm_ruby_string, '1.9.2-p290@test_app'               # Or whatever env you want it to run in.
+set :rvm_ruby_string, '1.9.2-p180@test_app'               # Or whatever env you want it to run in.
 set :rvm_bin_path, "$HOME/.rvm/bin"
 set :rvm_type, :user
 
-set :default_environment, {
-  'PATH' => "/home/deploy/.rvm/gems/ruby-1.9.2-p290/bin:/home/deploy/.rvm/gems/ruby-1.9.2-p290@global/bin:/home/deploy/.rvm/rubies/ruby-1.9.2-p290/bin:/home/deploy/.rvm/bin:$PATH",
-  'RUBY_VERSION' => 'ruby-1.9.2-p290',
-  'GEM_HOME'     => '/home/deploy/.rvm/gems/ruby-1.9.2-p290',
-  'GEM_PATH'     => '/home/deploy/.rvm/gems/ruby-1.9.2-p290:/home/deploy/.rvm/gems/ruby-1.9.2-p290@global',
-  'BUNDLE_PATH'  => '/home/deploy/.rvm/gems/ruby-1.9.2-p290'  # If you are using bundler.
-}
+# set :default_environment, {
+#   'PATH' => "/home/deploy/.rvm/gems/ruby-1.9.2-p180/bin:/home/deploy/.rvm/gems/ruby-1.9.2-p180@global/bin:/home/deploy/.rvm/rubies/ruby-1.9.2-p180/bin:/home/deploy/.rvm/bin:$PATH",
+#   'RUBY_VERSION' => 'ruby-1.9.2-p180',
+#   'GEM_HOME'     => '/home/deploy/.rvm/gems/ruby-1.9.2-p180',
+#   'GEM_PATH'     => '/home/deploy/.rvm/gems/ruby-1.9.2-p180:/home/deploy/.rvm/gems/ruby-1.9.2-p180@global',
+#   'BUNDLE_PATH'  => '/home/deploy/.rvm/gems/ruby-1.9.2-p180'  # If you are using bundler.
+# }
 
 namespace :deploy do
 
@@ -87,7 +87,7 @@ namespace :deploy do
       error_log #{deploy_to}/current/log/error.log;
 
       root #{deploy_to}/current/public;
-      passenger_enabled on;
+      # passenger_enabled on;
       rails_env #{rails_env};
 
       location /system {
@@ -100,7 +100,7 @@ namespace :deploy do
     put vhost, "#{release_path}/config/vhost"
     # sudo "rm /opt/nginx/sites-available/#{app_uri} /opt/nginx/sites-enabled/#{app_uri}"
     sudo "mv -f #{release_path}/config/vhost /etc/nginx/sites-available/#{app_uri}"
-    sudo "ln -f -s /etc/nginx/sites-available/#{app_uri} /opt/nginx/sites-enabled/#{app_uri}"
+    sudo "ln -f -s /etc/nginx/sites-available/#{app_uri} /etc/nginx/sites-enabled/#{app_uri}"
     sudo "/etc/init.d/nginx reload"
   end
 
@@ -139,15 +139,15 @@ namespace :deploy do
       puts "************ running: deploy.rb: symlinking .rvmrc: ln -nfs #{shared_path}/config/.rvmrc #{release_path}/config/.rvmrc"
       run "cp -vf #{release_path}/.rvmrc #{shared_path}/config/.rvmrc"
       puts "************ running: ln -nfs #{shared_path}/config/.rvmrc #{release_path}/.rvmrc"
-      run "ln -nfs .rvmrc #{shared_path}/config/.rvmrc"
+      # run "ln -nfs .rvmrc #{shared_path}/config/.rvmrc"
       # run "ln -nfs #{shared_path}/config/.rvmrc #{release_path}/.rvmrc"
     end
   end
 end
 
-  # # after "deploy", "rvmrc:create"
+# after "deploy", "rvmrc:create"
 # before "deploy:finalize_update",     "deploy:rvmrc:symlink"
-after "deploy:cleanup",             "deploy:create_vhost_nginx"
+after "deploy:update_code",         "deploy:create_vhost_nginx"
 after "deploy:create_vhost_nginx",  "deploy:nginx:reload"
 
 =begin
